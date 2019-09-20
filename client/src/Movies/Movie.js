@@ -8,8 +8,7 @@ export default class Movie extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      movie: "",
-      id:""
+      movie: null,
     };
   }
 
@@ -32,12 +31,16 @@ export default class Movie extends React.Component {
   };
 
 
-
-
   saveMovie = () => {
     const addToSavedList = this.props.addToSavedList;
     addToSavedList(this.state.movie);
   };
+
+   deleteMovie = movie => {
+    axios.delete(`http://localhost:5000/api/movies/${movie.id}`)
+    .then(res => this.props.history.push("/"))
+    .catch(error => console.log("error in delete", error))
+  }
 
 
   render() {
@@ -52,12 +55,13 @@ export default class Movie extends React.Component {
           Save
         </div>
        
-       {/* BUTTON GOES HERE */}
-        {/* <div className="update-button" onClick={"/update-movie/:id"}>Update</div> */}
-<Route path="/update-movie/:id" component={Form}>UPDATE</Route>
+ <div className="update-button" onClick={()=>{
+   this.props.history.push(`/update-movie/${this.state.movie.id}`)
+ }}>Update Movie</div>
 
-
-    
+ <div className="delete-button" onClick={()=> this.state.movie}>
+   Delete Movie
+ </div>
       </div>
     );
   }
